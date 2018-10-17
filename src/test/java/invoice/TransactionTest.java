@@ -93,8 +93,23 @@ public class TransactionTest {
 
 		assertEquals(before + 2f * 10f, after, 0.001f);		
 	}
+        
+        
+       
+        @Test (expected=SQLException.class)
+        public void productUnknown() throws Exception{
+            int[] productIds = new int[]{5}; //Le produit 5 n'existe pas
+            int[] quantities=new int[]{2};
+            myDAO.createInvoice(myCustomer, productIds, quantities);
+        }
 	
-
+        @Test (expected=SQLException.class)
+        public void QuantityNegative() throws Exception{
+            int[] productIds = new int[]{0}; //Le produit 0 existe
+            int[] quantities=new int[]{-2}; //La quantité est négative, donc impossible
+            myDAO.createInvoice(myCustomer, productIds, quantities);
+        }
+	
 	
 	public static DataSource getDataSource() throws SQLException {
 		org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
